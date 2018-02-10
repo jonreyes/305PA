@@ -1,5 +1,4 @@
-# 305DatingAppDB
-CSE 305 Dating App Database Project
+# CSE 305 Project Assignment 1
 ## To Do 
 + Fill In / Validate Attribute Associated Type Constraints<br>
 	- Ex: Id INTEGER, so How to List Set Valued Attributes???<br>
