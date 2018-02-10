@@ -1,0 +1,109 @@
+CSE 305
+Project Assignment #1
+Relational Model
+SQL Description
+
+CREATE TABLE Customer(
+	UserId						INTEGER,
+	LastName 					CHAR(),
+	FirstName					CHAR(),
+	Address						CHAR(),
+	City						CHAR(),
+	State						CHAR(2),
+	ZipCode						CHAR(10),
+	Telephone					CHAR(),
+	Email						CHAR(),
+	AccountNumber				INTEGER,
+	AccountCreationDate			CHAR(),
+	CreditCardNumber			CHAR(),
+	ProfilePlacementPriority	INTEGER,
+	Rating						DOUBLE,
+	DateTime					CHAR(),
+	PRIMARY KEY(UserId),
+	FOREIGN KEY(AccountNumber) REFERENCES Profile(ProfileId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE)
+
+CREATE TABLE Profile(
+	ProfileId					INTEGER,
+	ProfileName					CHAR(),
+	Age 						INTEGER,
+	Address						CHAR(),
+	Sex							CHAR(1),
+	PhysicalFeatures			CHAR()[],	???
+	HobbiesInterests			CHAR()[],	???
+	Photos						IMAGES[],	???
+	DatingGeoRange				INTEGER,	???	
+	DatingAgeRange				INTEGER,	???
+	PRIMARY KEY(ProfileId))
+
+CREATE TABLE Like(
+	LikerId						INTEGER,
+	LikeeId						INTEGER,
+	DateTime					CHAR(),
+	PRIMARY KEY(LikerId,LikeeId),
+	FOREIGN KEY(LikerId) REFERENCES Profile(ProfileId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(LikeeId) REFERENCES Profile(ProfileId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE)
+
+CREATE TABLE Referral(
+	UserA						INTEGER,
+	UserB						INTEGER,
+	UserC						INTEGER,
+	DateTime					CHAR()
+	PRIMARY KEY(UserA,UserB,UserC),
+	FOREIGN KEY(UserA) REFERENCES Customer(UserId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(UserB) REFERENCES Customer(UserId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(UserC) REFERENCES Customer(UserId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(UserB,UserC) REFERENCES Date(User1,User2)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE)
+
+CREATE TABLE Date(
+	DateId						INTEGER,
+	User1						INTEGER,
+	User2						INTEGER,
+	CustomerRep					INTEGER,
+	DateTime					CHAR(),
+	GeoLocation					CHAR()
+	BookingFee					DOUBLE(),
+	Comments					CHAR()[],	???
+	User1DateRating				DOUBLE,
+	User2DateRating				DOUBLE,
+	FOREIGN KEY(User1) REFERENCES Customer(UserId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(User2) REFERENCES Customer(UserId)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(User1) REFERENCES Referral(UserB)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(User2) REFERENCES Referral(UserC)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE,
+	FOREIGN KEY(CustomerRep) REFERENCES Employee(SSN)
+		ON DELETE NO ACTION
+		ON UPDATE CASCADE)
+
+CREATE TABLE Employee(
+	SSN							INTEGER,
+	LastName					CHAR(),
+	FirstName					CHAR(),
+	Address						CHAR(),
+	City						CHAR()
+	State						CHAR(2),
+	ZipCode						CHAR(10),
+	StartDate					CHAR(),
+	HourlyRate					DOUBLE,
+	PRIMARY KEY(SSN)
+)
