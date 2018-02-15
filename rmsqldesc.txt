@@ -5,7 +5,6 @@ SQL Description
 
 CREATE TABLE Customer(
 	CustomerId					INTEGER,
-	Profile						CHAR(24),
 	LastName 					CHAR(25),
 	FirstName					CHAR(25),
 	Address						CHAR(50),
@@ -14,32 +13,33 @@ CREATE TABLE Customer(
 	ZipCode						CHAR(10),
 	Telephone					CHAR(10),
 	Email						CHAR(255),
-	Account						INTEGER,	
 	ProfilePlacementPriority	PPP,
 	Rating						Rating,
 	LastActive					DATETIME,
 	PRIMARY KEY(CustomerId)
-	FOREIGN KEY(Profile) REFERENCES Profile(ProfileId)
-	FOREIGN KEY(Account) REFERENCES Account(AccountNumber)
 )
 
 CREATE TABLE Account(
 	AccountNumber				INTEGER,
+	Customer 					INTEGER,
 	CreationDate				DATE,
 	CreditCardNumber			CHAR(16),
-	PRIMARY KEY(AccountNumber)
+	PRIMARY KEY(AccountNumber),
+	FOREIGN KEY(Customer) REFERENCES Customer(CustomerId)
 )
 
 CREATE TABLE Profile(
 	ProfileId					CHAR(24),
 	ProfileName					CHAR(24),
+	Customer 					INTEGER,
 	Age 						INTEGER,
 	Address						CHAR(50),
 	Sex							Sex,	
 	DatingGeoRange				INTEGER,
 	DatingAgeRangeBegin			INTEGER,	
 	DatingAgeRangeEnd			INTEGER,
-	PRIMARY KEY(ProfileId)
+	PRIMARY KEY(ProfileId),
+	FOREIGN KEY(Customer) REFERENCES Customer(CustomerId)
 )
 
 CREATE TABLE Trait(
