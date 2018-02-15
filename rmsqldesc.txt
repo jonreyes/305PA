@@ -4,103 +4,133 @@ Relational Model
 SQL Description
 
 CREATE TABLE Customer(
-	UserId						INTEGER,
-	LastName 					CHAR(),
-	FirstName					CHAR(),
-	Address						CHAR(),
-	City						CHAR(),
+	CustomerId					INTEGER,
+	Profile						CHAR(24),
+	LastName 					CHAR(25),
+	FirstName					CHAR(25),
+	Address						CHAR(50),
+	City						CHAR(50),
 	State						CHAR(2),
 	ZipCode						CHAR(10),
-	Telephone					CHAR(),
-	Email						CHAR(),
+	Telephone					CHAR(10),
+	Email						CHAR(255),
+	Account						INTEGER,	
+	ProfilePlacementPriority	PPP,
+	Rating						Rating,
+	LastActive					DATETIME,
+	PRIMARY KEY(CustomerId)
+	FOREIGN KEY(Profile) REFERENCES Profile(ProfileId)
+	FOREIGN KEY(Account) REFERENCES Account(AccountNumber)
+)
+
+CREATE TABLE Account(
 	AccountNumber				INTEGER,
-	AccountCreationDate			CHAR(),
-	CreditCardNumber			CHAR(),	
-	ProfilePlacementPriority	INTEGER,
-	Rating						DOUBLE,
-	DateTime					CHAR(),
-	PRIMARY KEY(UserId))
+	CreationDate				DATE,
+	CreditCardNumber			CHAR(16),
+	PRIMARY KEY(AccountNumber)
+)
 
 CREATE TABLE Profile(
-	ProfileId					INTEGER,
-	ProfileName					CHAR(),
+	ProfileId					CHAR(24),
+	ProfileName					CHAR(24),
 	Age 						INTEGER,
-	Address						CHAR(),
-	Sex							CHAR(1),
-	PhysicalFeatures			CHAR()[],	???
-	HobbiesInterests			CHAR()[],	???
-	Photos						IMAGES[],	???
-	DatingGeoRange				INTEGER,	???	
-	DatingAgeRange				INTEGER,	???
+	Address						CHAR(50),
+	Sex							Sex,	
+	DatingGeoRange				INTEGER,
+	DatingAgeRangeBegin			INTEGER,	
+	DatingAgeRangeEnd			INTEGER,
 	PRIMARY KEY(ProfileId)
 )
 
+CREATE TABLE Trait(
+	TraitId						INTEGER,
+	User 						CHAR(24),
+	Height						DOUBLE,
+	Weight						DOUBLE,
+	HairColor					INTEGER,
+	PRIMARY KEY(TraitId)
+	FOREIGN KEY(User) REFERENCES Profile(ProfileId)
+)
+
+CREATE TABLE Photo(
+	PhotoId						INTEGER,
+	User 						CHAR(24),
+	Path						CHAR(255),
+	PRIMARY KEY(PhotoId) 
+	FOREIGN KEY(User) REFERENCES Profile(ProfileId)
+)
+
+CREATE TABLE Hobby(
+	HobbyId						INTEGER,
+	User 						CHAR(24),
+	Name 						CHAR(20),
+	PRIMARY KEY(HobbyId)
+	FOREIGN KEY(User) REFERENCES Profile(ProfileId)
+)
+
 CREATE TABLE Like(
-	LikerId						INTEGER,
-	LikeeId						INTEGER,
-	DateTime					CHAR(),
-	PRIMARY KEY(LikerId,LikeeId),
+	LikeId 						INTEGER,
+	LikerId						CHAR(24),
+	LikeeId						CHAR(24),
+	DateTime					DATETIME,
+	PRIMARY KEY(LikeId),
 	FOREIGN KEY(LikerId) REFERENCES Profile(ProfileId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
 	FOREIGN KEY(LikeeId) REFERENCES Profile(ProfileId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE)
+)
 
 CREATE TABLE Referral(
-	UserA						INTEGER,
-	UserB						INTEGER,
-	UserC						INTEGER,
-	DateTime					CHAR()
-	PRIMARY KEY(UserA,UserB,UserC),
-	FOREIGN KEY(UserA) REFERENCES Customer(UserId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(UserB) REFERENCES Customer(UserId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(UserC) REFERENCES Customer(UserId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE)
+	ReferralId 					INTEGER,
+	UserA						CHAR(24),
+	UserB						CHAR(24),
+	UserC						CHAR(24),
+	DateTime					DATETIME,
+	PRIMARY KEY(ReferralId),
+	FOREIGN KEY(UserA) REFERENCES Profile(ProfileId)
+	FOREIGN KEY(UserB) REFERENCES Profile(ProfileId)
+	FOREIGN KEY(UserC) REFERENCES Profile(ProfileId)
+)
 
 CREATE TABLE Date(
 	DateId						INTEGER,
-	User1						INTEGER,
-	User2						INTEGER,
+	User1						CHAR(24),
+	User2						CHAR(24),
 	CustomerRep					INTEGER,
-	DateTime					CHAR(),
-	GeoLocation					CHAR()
-	BookingFee					DOUBLE(),
-	Comments					CHAR()[],	???
-	User1DateRating				DOUBLE,
-	User2DateRating				DOUBLE,
-	FOREIGN KEY(User1) REFERENCES Customer(UserId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(User2) REFERENCES Customer(UserId)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(User1) REFERENCES Referral(UserB)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(User2) REFERENCES Referral(UserC)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE,
-	FOREIGN KEY(User1,User2) REFERENCES Referral(UserB,UserC)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE
+	DateTimeStart				DATETIME,
+	DateTimeEnd					DATETIME,
+	GeoLocation					CHAR(),
+	BookingFee					DOUBLE,
+	User1DateRating				Rating,
+	User2DateRating				Rating,
+	PRIMARY KEY(DateId),
+	FOREIGN KEY(User1) REFERENCES Profile(ProfileId),
+	FOREIGN KEY(User2) REFERENCES Profile(ProfileId),
 	FOREIGN KEY(CustomerRep) REFERENCES Employee(SSN)
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE)
+)
+
+CREATE TABLE Comment(
+	CommentId					INTEGER,
+	Author 						CHAR(24),
+	Date 						INTEGER,
+	DateTime 					DATETIME,
+	PRIMARY KEY(CommentId),
+	FOREIGN KEY(Date) REFERENCES Date(DateId)
+)
 
 CREATE TABLE Employee(
 	SSN							INTEGER,
-	LastName					CHAR(),
-	FirstName					CHAR(),
-	Address						CHAR(),
-	City						CHAR()
+	LastName					CHAR(25),
+	FirstName					CHAR(25),
+	Address						CHAR(50),
+	City						CHAR(50)
 	State						CHAR(2),
 	ZipCode						CHAR(10),
-	StartDate					CHAR(),
+	StartDate					DATE,
 	HourlyRate					DOUBLE,
 	PRIMARY KEY(SSN))
+
+CREATE DOMAIN Sex CHAR(1)
+	CHECK( VALUE IN('M','F'))
+CREATE DOMAIN PPP CHAR()
+	CHECK( VALUE IN('Super','Good','User'))
+CREATE DOMAIN Rating CHAR(9)
+	CHECK( VALUE IN('Excellent','Very Good','Good','Fair','Poor'))
