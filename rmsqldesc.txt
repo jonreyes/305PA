@@ -112,6 +112,7 @@ CREATE TABLE Employee(
 	Address						CHAR(50),
 	City						CHAR(50)
 	State						CHAR(2),
+	Telephone					CHAR(10),
 	ZipCode						CHAR(10),
 	StartDate					DATE,
 	HourlyRate					DOUBLE,
