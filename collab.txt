@@ -1,0 +1,23 @@
+Collaboration Plan
+
+Somewhat Equal Division of Labor
+
+		Attributes	Teammate
+Customer	12		A
+Account		4
+			16
+
+Profile		11		B
+Referral	4		B
+Like		3		B
+Photo		3		B
+Hobby		2		B
+			23
+
+Employee 	10		C
+Date		9		C
+Comment 	3		C
+			22
+
+Total		61
+
