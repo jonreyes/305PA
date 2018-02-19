@@ -1,0 +1,87 @@
+From the specification, obvious entities, corresponding attributes, and keys were simply produced accordingly.
+For example, for the most part, categories of data are listed as entities and items of data are listed as attributes
+This includes Customer, Profile, Referral, Like, Date, Employee.
+
+Examining further, items of data that would become set valued attributes were converted to individual entities, since it is best for a column to only hold one value. This is with the exception of Physical Characteristics which was broken down into individual attributes of height, weight, and hair color within Profile, since these attributes have a 1 to 1 relationship.
+New additional entities include Account, Photo, Hobby, and Comment.
+
+All together the design has the following entities:
+    Customer
+    Profile
+    Referral
+    Like
+    Date
+    Employee
+    Account
+    Photo
+    Hobby
+    Comment
+
+Next, entity relationships are examined.
+    Customers Have
+        Customers can have one or more Profiles.
+        Customers can have one or more Accounts.
+        Profiles and Accounts must be associated with a Customer.
+
+    Profiles Have
+        Profiles contain zero or more Photos.
+        Profiles contain zero or more Hobbies.
+        Photos and Hobbies must be associated with a Profile.
+
+    Profile Actions
+        Profiles can Like other Profiles.    
+        Profiles can make a Referral for two other Profiles to Date;
+        Profiles can Date other Profiles.
+        Profiles can Comment on Dates.
+
+    Dates Have Comments
+
+    Employees Supervise Dates
+        Dates must be supervised by an Employee.
+        Employee may be vacant and does not always have to be supervising a Date.
+
+Then, entity types.
+    
+    Strong entities are independent of other entities and uniquely identified by a single attribute primary key.
+
+    Strong Entities Include:
+        Employee
+            Employees can exist w/o requiring the Supervision of a Date
+        Customer
+            Customers are uniquely identified by Customer Id independent of Profiles and Accounts
+
+    Weak entities are uniquely identified by a composite primary key that includes an attribute which is a foreign key reference to the primary key of a Strong entity which their existence is dependent upon.
+
+    Weak Entities Include:
+        Likes
+            Like(LikeeId,LikerId) depends upon Profile(ProfileId)
+        Referrals
+            Referral(UserA,UserB,UserC) depends upon Profile(ProfileId)
+        Comments
+            Comment(Author,Date,DateTime) depends upon Profile(ProfileId) and Date(DateId)
+        Photos
+            Photo(User,No) depends upon Profile(ProfileId)
+        Hobbies
+            Hobby(User,Name) depends upon Profile(ProfileId)
+
+    Not Sure:
+        Profiles - Strong?
+            Profile have Id but must be associated with Customer
+        Accounts - Weak?
+            Accounts have AccountNumber but cannot exist w/o Customer owner
+        Dates - Weak?
+            Dates have Id but cannot exist without participating Profiles
+
+Finally, domains:
+    
+    Sex
+        Must be Male or Female.
+    
+    Profile Placement Priority
+        Categories include: 
+            Super-User, Good-User, and User-User
+    
+    Rating
+        Scale from:
+            Poor, Fair, Good, Very Good, Excellent
+
