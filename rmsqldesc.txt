@@ -34,7 +34,10 @@ CREATE TABLE Profile(
 	Customer 					INTEGER,
 	Age 						INTEGER,
 	Address						CHAR(50),
-	Sex							Sex,	
+	Sex							Sex,
+	Height						DOUBLE,
+	Weight						DOUBLE,
+	HairColor 					INTEGER,	
 	DatingGeoRange				INTEGER,
 	DatingAgeRangeBegin			INTEGER,	
 	DatingAgeRangeEnd			INTEGER,
@@ -42,18 +45,8 @@ CREATE TABLE Profile(
 	FOREIGN KEY(Customer) REFERENCES Customer(CustomerId)
 )
 
-CREATE TABLE Trait(
-	TraitId						INTEGER,
-	User 						CHAR(24),
-	Height						DOUBLE,
-	Weight						DOUBLE,
-	HairColor					INTEGER,
-	PRIMARY KEY(TraitId)
-	FOREIGN KEY(User) REFERENCES Profile(ProfileId)
-)
-
 CREATE TABLE Photo(
-	PhotoId						INTEGER,
+	PhotoNo						INTEGER,
 	User 						CHAR(24),
 	Path						CHAR(255),
 	PRIMARY KEY(PhotoId) 
@@ -61,7 +54,6 @@ CREATE TABLE Photo(
 )
 
 CREATE TABLE Hobby(
-	HobbyId						INTEGER,
 	User 						CHAR(24),
 	Name 						CHAR(20),
 	PRIMARY KEY(HobbyId)
@@ -69,22 +61,20 @@ CREATE TABLE Hobby(
 )
 
 CREATE TABLE Like(
-	LikeId 						INTEGER,
 	LikerId						CHAR(24),
 	LikeeId						CHAR(24),
 	DateTime					DATETIME,
-	PRIMARY KEY(LikeId),
+	PRIMARY KEY(LikerId,LikeeId),
 	FOREIGN KEY(LikerId) REFERENCES Profile(ProfileId)
 	FOREIGN KEY(LikeeId) REFERENCES Profile(ProfileId)
 )
 
 CREATE TABLE Referral(
-	ReferralId 					INTEGER,
 	UserA						CHAR(24),
 	UserB						CHAR(24),
 	UserC						CHAR(24),
 	DateTime					DATETIME,
-	PRIMARY KEY(ReferralId),
+	PRIMARY KEY(UserA,UserB,UserC),
 	FOREIGN KEY(UserA) REFERENCES Profile(ProfileId)
 	FOREIGN KEY(UserB) REFERENCES Profile(ProfileId)
 	FOREIGN KEY(UserC) REFERENCES Profile(ProfileId)
@@ -108,11 +98,10 @@ CREATE TABLE Date(
 )
 
 CREATE TABLE Comment(
-	CommentId					INTEGER,
 	Author 						CHAR(24),
 	Date 						INTEGER,
 	DateTime 					DATETIME,
-	PRIMARY KEY(CommentId),
+	PRIMARY KEY(Author,Date,DateTime),
 	FOREIGN KEY(Date) REFERENCES Date(DateId)
 )
 
